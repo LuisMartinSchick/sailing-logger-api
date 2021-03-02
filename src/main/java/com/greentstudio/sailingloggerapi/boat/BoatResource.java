@@ -1,5 +1,6 @@
 package com.greentstudio.sailingloggerapi.boat;
 
+import com.greentstudio.sailingloggerapi.exceptions.BoatNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +27,15 @@ public class BoatResource {
      * Retrieves a certain boat matching the ID from the DAO.
      *
      * @param id The ID of the boat.
-     * @return Returns the boat matching the ID or null.
+     * @throws BoatNotFoundException No boat with this ID exists.
+     * @return Returns the boat matching the ID.
      */
     @GetMapping("/boats/{id}")
-    public Boat retrieveBoat(@PathVariable int id) {
-        return service.findSpecificBoat(id);
+    public Boat retrieveBoat(@PathVariable int id) throws BoatNotFoundException {
+        Boat boat = service.findSpecificBoat(id);
+        if(boat==null) //runtime exception
+            throw new BoatNotFoundException("id:"+id);
+        return boat;
     }
 
     /**
