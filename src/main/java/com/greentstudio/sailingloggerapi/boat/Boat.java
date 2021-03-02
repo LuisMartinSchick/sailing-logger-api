@@ -6,8 +6,8 @@ public class Boat {
 
 
     private Integer intBoatID;
-    final private Date dateBoatConstruction;
     private String strBoatName;
+    final private Date dateBoatConstruction;
 
     /**
      * The constructor for the data type Boat.
@@ -18,8 +18,9 @@ public class Boat {
     public Boat(Integer intBoatID, String strBoatName, Date dateBoatConstruction) {
         super();
         this.intBoatID = intBoatID;
-        this.dateBoatConstruction = dateBoatConstruction;
         this.strBoatName = strBoatName;
+        this.dateBoatConstruction = dateBoatConstruction;
+
     }
 
     public Integer getIntBoatID() {
@@ -44,6 +45,6 @@ public class Boat {
 
     @Override
     public String toString(){
-        return String.format("Boat[intBoatID=%s, dateBoatConstruction=%s, strBoatName=%s]", intBoatID, dateBoatConstruction,strBoatName);
+        return String.format("Boat[intBoatID=%s, strBoatName=%s, dateBoatConstruction=%s]", intBoatID, strBoatName, dateBoatConstruction);
     }
 }
