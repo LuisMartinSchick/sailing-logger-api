@@ -1,7 +1,9 @@
 package com.greentstudio.sailingloggerapi.exceptions;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,4 +48,21 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handles invalid creation parameters given to POST.
+     * @param ex The triggering exception.
+     * @param headers The headers to be returned to the client.
+     * @param status The Status code to be returned to the client.
+     * @param request The incorrect request.
+     * @return Returns the exception structure and a 400 Status Code
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(), "Validation Failed", ex.getBindingResult().toString());
+        //returning exception structure and specific status
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }

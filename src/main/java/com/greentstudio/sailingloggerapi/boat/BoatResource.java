@@ -1,5 +1,6 @@
 package com.greentstudio.sailingloggerapi.boat;
 
+import javax.validation.Valid;
 import com.greentstudio.sailingloggerapi.exceptions.BoatNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class BoatResource {
      * @param boat The boat to be added to the list.
      */
     @PostMapping("/boats")
-    public ResponseEntity<Object> createBoat(@RequestBody Boat boat) {
+    public ResponseEntity<Object> createBoat(@Valid @RequestBody Boat boat) {
         Boat addedBoat = service.addNewBoat(boat);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(addedBoat.getIntBoatID())

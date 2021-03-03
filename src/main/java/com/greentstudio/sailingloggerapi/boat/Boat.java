@@ -1,12 +1,16 @@
 package com.greentstudio.sailingloggerapi.boat;
 
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class Boat {
-
+    final private int INT_BOAT_NAME_MIN = 3;
 
     private Integer intBoatID;
+    @Size(min=INT_BOAT_NAME_MIN, message = "Name should at least have "+INT_BOAT_NAME_MIN+" characters")
     private String strBoatName;
+    @Past
     final private Date dateBoatConstruction;
 
     /**
