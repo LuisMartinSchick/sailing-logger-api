@@ -1,54 +1,47 @@
 package com.greentstudio.sailingloggerapi.boat;
 
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
+import com.greentstudio.sailingloggerapi.port.Port;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Date;
+import java.util.Optional;
 
-public class Boat {
-    final private int INT_BOAT_NAME_MIN = 3;
+/**
+ * Entity class for the Boats.
+ *
+ * @author Luis Martin Schick
+ */
+@Data
+@Entity
+@NoArgsConstructor
+public
+class Boat {
 
-    private Integer intBoatID;
-    @Size(min=INT_BOAT_NAME_MIN, message = "Name should at least have "+INT_BOAT_NAME_MIN+" characters")
-    private String strBoatName;
-    @Past
-    final private Date dateBoatConstruction;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String strName;
+    private String strColor;
+    private Date dateBoatConstruction;
 
-    /**
-     * The constructor for the data type Boat.
-     * @param intBoatID Integer. The ID of the boat.
-     * @param strBoatName String. The name of the boat.
-     * @param dateBoatConstruction Date. The date the boat was constructed.
-     */
-    public Boat(Integer intBoatID, String strBoatName, Date dateBoatConstruction) {
-        super();
-        this.intBoatID = intBoatID;
-        this.strBoatName = strBoatName;
+    @JsonIgnore //Stops serialization to avoid a recursive, bi-directional relationship
+    @ManyToOne
+    private Port port;
+
+
+    public Boat(String strName, String strColor, Date dateBoatConstruction) {
+        this.strName = strName;
+        this.strColor = strColor;
         this.dateBoatConstruction = dateBoatConstruction;
-
     }
 
-    public Integer getIntBoatID() {
-        return intBoatID;
-    }
-
-    public void setIntBoatID(Integer intBoatID) {
-        this.intBoatID = intBoatID;
-    }
-
-    public String getStrBoatName() {
-        return strBoatName;
-    }
-
-    public void setStrBoatName(String strBoatName) {
-        this.strBoatName = strBoatName;
-    }
-
-    public Date getDateBoatConstruction() {
-        return dateBoatConstruction;
-    }
-
-    @Override
-    public String toString(){
-        return String.format("Boat[intBoatID=%s, strBoatName=%s, dateBoatConstruction=%s]", intBoatID, strBoatName, dateBoatConstruction);
+    public Optional<Long> getId() {
+        return Optional.ofNullable(this.id);
     }
 }
