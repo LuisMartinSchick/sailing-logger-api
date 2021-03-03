@@ -1,12 +1,17 @@
 package com.greentstudio.sailingloggerapi.boat;
 
-import javax.validation.Valid;
 import com.greentstudio.sailingloggerapi.exceptions.BoatNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -17,6 +22,7 @@ public class BoatResource {
 
     /**
      * Retrieves a list of all boats from the DAO
+     *
      * @return Returns all boats.
      */
     @GetMapping("/boats")
@@ -24,19 +30,27 @@ public class BoatResource {
         return service.getAllBoats();
     }
 
+
+
     /**
      * Retrieves a certain boat matching the ID from the DAO.
      *
      * @param id The ID of the boat.
-     * @throws BoatNotFoundException No boat with this ID exists.
-     * @return Returns the boat matching the ID.
+     * @return Returns the model of the boat matching the ID.
+     * @throws BoatNotFoundException Thrown when no boat with given ID exists.
      */
     @GetMapping("/boats/{id}")
-    public Boat retrieveBoat(@PathVariable int id) throws BoatNotFoundException {
+    public EntityModel<Boat> retrieveBoat(@PathVariable int id) throws BoatNotFoundException {
         Boat boat = service.findSpecificBoat(id);
-        if(boat==null) //runtime exception
-            throw new BoatNotFoundException("id:"+id);
-        return boat;
+
+        if (boat == null) //runtime exception
+            throw new BoatNotFoundException("id:" + id);
+
+        EntityModel<Boat> model = EntityModel.of(boat);
+        Link link = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).retrieveAllBoats()).withRel("all-boats");
+
+        model.add(link);
+        return model;
     }
 
     /**
@@ -54,9 +68,9 @@ public class BoatResource {
     }
 
     @DeleteMapping("/boats/{id}")
-    public void deleteBoat(@PathVariable int id){
+    public void deleteBoat(@PathVariable int id) {
         Boat boat = service.deleteBoatByID(id);
-        if(boat==null){
+        if (boat == null) {
             //runtime exception
             throw new BoatNotFoundException("id: " + id);
         }
