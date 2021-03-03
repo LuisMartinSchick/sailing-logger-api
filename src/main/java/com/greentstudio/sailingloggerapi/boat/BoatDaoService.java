@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 //TODO replace with proper Database
@@ -57,6 +58,24 @@ public class BoatDaoService {
         for (Boat boat : boats) {
             if (boat.getIntBoatID() == id)
                 return boat;
+        }
+        return null;
+    }
+
+    /**
+     * Deletes the boat matching the given ID and returns it.
+     *
+     * @param id The ID of the boat to be deleted
+     * @return Returns the boat or null.
+     */
+    public Boat deleteBoatByID(int id) {
+        Iterator<Boat> iterator = boats.iterator();
+        while (iterator.hasNext()) {
+            Boat boat = iterator.next();
+            if (boat.getIntBoatID() == id) {
+                iterator.remove();
+                return boat;
+            }
         }
         return null;
     }

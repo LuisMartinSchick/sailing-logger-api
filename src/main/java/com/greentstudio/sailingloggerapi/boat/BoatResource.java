@@ -51,4 +51,13 @@ public class BoatResource {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping("/boats/{id}")
+    public void deleteBoat(@PathVariable int id){
+        Boat boat = service.deleteBoatByID(id);
+        if(boat==null){
+            //runtime exception
+            throw new BoatNotFoundException("id: " + id);
+        }
+    }
 }
