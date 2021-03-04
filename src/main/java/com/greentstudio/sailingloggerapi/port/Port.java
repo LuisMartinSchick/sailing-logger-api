@@ -1,9 +1,9 @@
 package com.greentstudio.sailingloggerapi.port;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.greentstudio.sailingloggerapi.boat.Boat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,11 +19,12 @@ import java.util.Optional;
 @Entity
 @NoArgsConstructor
 public class Port {
-    @Id @GeneratedValue private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  private Long id;
     private String strName;
 
     @JsonIgnore //Stops serialization to avoid a recursive, bi-directional relationship
     @OneToMany(mappedBy = "port", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JsonManagedReference
     private List<Boat> boats = new ArrayList<>();
 
     public Port(String strName){
